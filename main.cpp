@@ -1,6 +1,6 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
-
+#include <windows.h>
 using namespace std;
 #define H 20
 #define W 15
@@ -108,7 +108,23 @@ void draw(){
     for (int i = 0 ; i < H ; i++, cout<<endl)
         for (int j = 0 ; j < W ; j++) cout<<board[i][j];
 }
-
+void removeLine() {
+    int i, j;
+    bool lineRemoved = false;
+    for (i = H - 2; i > 0; i--) {
+        for (j = 0; j < W; j++)
+            if (board[i][j] == ' ') break;
+        if (j == W) { // Nếu dòng đầy
+            for (int ii = i; ii > 0; ii--)
+                for (int jj = 0; jj < W; jj++)
+                    board[ii][jj] = board[ii - 1][jj];
+            i++; // Giữ nguyên index để check lại dòng vừa rớt xuống
+            lineRemoved = true;
+            draw();
+            Sleep(200);
+        }
+    }
+}
 int main()
 {
     srand(time(0));
