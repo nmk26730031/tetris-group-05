@@ -126,7 +126,6 @@ int main()
         if (canMove(0,1)) y++;
         else{
             block2Board();
-            removeLine();
             x = 5; y = 0; b = rand()%7;
         }
         block2Board();
