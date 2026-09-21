@@ -47,9 +47,14 @@ void initBoard(){
 }
 void draw(){
     system("cls");
-
-    for (int i = 0 ; i < H ; i++, cout<<endl)
-        for (int j = 0 ; j < W ; j++) cout<<board[i][j];
+    for (int i = 0 ; i < H ; i++) {
+        for (int j = 0 ; j < W ; j++) {
+            if (board[i][j] == '#') cout << "##";       // Vẽ viền
+            else if (board[i][j] != ' ') cout << "[]";  // Vẽ block
+            else cout << "  ";                        // Vẽ khoảng trống
+        }
+        cout << endl;
+    }
 }
 void removeLine() {
     int i, j;
