@@ -73,6 +73,22 @@ void removeLine() {
         }
     }
 }
+
+void rotateBlock() {
+    char temp[4][4];
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            temp[j][3-i] = currentBlock[i][j];
+        }
+    }
+    if (canMove(0, 0, temp)) {
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                currentBlock[i][j] = temp[i][j];
+    }
+}
+
+
 int main()
 {
     srand(time(0));
