@@ -94,7 +94,7 @@ int main()
         }
         block2Board();
         draw();
-        _sleep(500);
+        Sleep(500);
     }
     return 0;
 }
