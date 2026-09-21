@@ -7,6 +7,7 @@ using namespace std;
 char board[H][W] = {};
 
 int x, y, b;
+int sleepTime = 500;
 char blocks[][4][4] ={
     {{' ','I',' ',' '}, {' ','I',' ',' '}, {' ','I',' ',' '}, {' ','I',' ',' '}}, // I
     {{' ',' ',' ',' '}, {' ','O','O',' '}, {' ','O','O',' '}, {' ',' ',' ',' '}}, // O
@@ -72,6 +73,10 @@ void removeLine() {
             Sleep(200);
         }
     }
+    if (lineRemoved) {
+        sleepTime -= 20;
+        if (sleepTime < 50) sleepTime = 50; // Giới hạn tốc độ tối đa
+    }
 }
 int main()
 {
@@ -94,7 +99,7 @@ int main()
         }
         block2Board();
         draw();
-        Sleep(500);
+        Sleep(sleepTime);
     }
     return 0;
 }
