@@ -17,6 +17,15 @@ char blocks[][4][4] ={
     {{' ',' ',' ',' '}, {'J',' ',' ',' '}, {'J','J','J',' '}, {' ',' ',' ',' '}}, // J
     {{' ',' ',' ',' '}, {' ',' ','L',' '}, {'L','L','L',' '}, {' ',' ',' ',' '}}  // L
 };
+
+
+void spawnBlock() {
+    x = 5; y = 0; b = rand() % 7;
+    for(int i = 0; i < 4; i++)
+        for(int j = 0; j < 4; j++)
+            currentBlock[i][j] = blocks[b][i][j];
+}
+
 bool canMove(int dx, int dy, char checkBlock[4][4]){
     for (int i = 0; i < 4; i++ )
         for (int j = 0; j < 4; j++ )
@@ -31,13 +40,13 @@ bool canMove(int dx, int dy, char checkBlock[4][4]){
 void block2Board(){
     for (int i = 0; i < 4; i++ )
         for (int j = 0; j < 4; j++ )
-            if (blocks[b][i][j] != ' ')
-                board[y+i][x+j] = blocks[b][i][j];
+            if (currentBlock[i][j] != ' ')
+                board[y+i][x+j] = currentBlock[i][j];
 }
 void boardDelBlock(){
     for (int i = 0; i < 4; i++ )
         for (int j = 0; j < 4; j++ )
-            if (blocks[b][i][j] != ' ')
+            if (currentBlock[i][j] != ' ')
                 board[y+i][x+j] = ' ';
 }
 void initBoard(){
