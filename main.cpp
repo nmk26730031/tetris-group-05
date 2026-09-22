@@ -107,20 +107,23 @@ int main()
     srand(time(0));
     x = 5; y = 0; b = rand()%7;
     initBoard();
+    spawnBlock();
     while (1){
         boardDelBlock();
         if (kbhit()){
             char c = getch();
-            if (c == 'a' && canMove(-1,0)) x--;
-            if (c == 'd' && canMove( 1,0)) x++;
-            if (c == 'x' && canMove( 0,1)) y++;
+            if (c == 'a' && canMove(-1,0,currentBlock)) x--;
+            if (c == 'd' && canMove( 1,0, currentBlock)) x++;
+            if (c == 's' && canMove( 0, 1, currentBlock)) y++;
+            if (c == 'w') rotateBlock();
             if (c == 'q') break;
         }
-        if (canMove(0,1)) y++;
+        if (canMove(0,1, currentBlock)) y++;
         else{
             block2Board();
             removeLine();
-            x = 5; y = 0; b = rand()%7;
+            spawnBlock();
+            if (!canMove(0, 0, currentBlock)) break;
         }
         block2Board();
         draw();
