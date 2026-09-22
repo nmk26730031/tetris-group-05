@@ -1,11 +1,12 @@
 ﻿#include <iostream>
 #include <conio.h>
 #include <windows.h>
+#include <time.h>
 using namespace std;
 #define H 20
 #define W 15
 char board[H][W] = {};
-
+char currentBlock[4][4];
 int x, y, b;
 int sleepTime = 500;
 char blocks[][4][4] ={
@@ -17,10 +18,10 @@ char blocks[][4][4] ={
     {{' ',' ',' ',' '}, {'J',' ',' ',' '}, {'J','J','J',' '}, {' ',' ',' ',' '}}, // J
     {{' ',' ',' ',' '}, {' ',' ','L',' '}, {'L','L','L',' '}, {' ',' ',' ',' '}}  // L
 };
-bool canMove(int dx, int dy){
+bool canMove(int dx, int dy, char checkBlock[4][4]){
     for (int i = 0; i < 4; i++ )
         for (int j = 0; j < 4; j++ )
-            if (blocks[b][i][j] != ' ') {
+            if (checkBlock[i][j] != ' ') {
                 int xt = x + j + dx;
                 int yt = y + i + dy;
                 if (xt < 1 || xt >= W-1 || yt >= H-1 ) return false;
