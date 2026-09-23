@@ -53,8 +53,8 @@ bool canMove(int dx, int dy, char checkBlock[4][4]){
 void block2Board(){
     for (int i = 0; i < 4; i++ )
         for (int j = 0; j < 4; j++ )
-           if (currentBlock[i][j] != ' ')
-                board[y+i][x+j] = currentBlock[i][j];
+            if (currentBlock->shape[i][j] != ' ')
+                board[y+i][x+j] = currentBlock->shape[i][j];
 }
 void boardDelBlock(){
     for (int i = 0; i < 4; i++ )
