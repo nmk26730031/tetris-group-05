@@ -118,29 +118,29 @@ void rotateBlock() {
 int main()
 {
     srand(time(0));
-    x = 5; y = 0; b = rand()%7;
     initBoard();
     spawnBlock();
+    
     while (1){
         boardDelBlock();
         if (kbhit()){
             char c = getch();
-            if (c == 'a' && canMove(-1,0,currentBlock)) x--;
-            if (c == 'd' && canMove( 1,0, currentBlock)) x++;
-            if (c == 's' && canMove( 0, 1, currentBlock)) y++;
-            if (c == 'w') rotateBlock();
+            if (c == 'a' && canMove(-1, 0, currentBlock->shape)) x--;
+            if (c == 'd' && canMove( 1, 0, currentBlock->shape)) x++;
+            if (c == 's' && canMove( 0, 1, currentBlock->shape)) y++; 
+            if (c == 'w') currentBlock->rotateBlock();                       
             if (c == 'q') break;
         }
-        if (canMove(0,1, currentBlock)) y++;
+        if (canMove(0, 1, currentBlock->shape)) y++;
         else{
             block2Board();
             removeLine();
             spawnBlock();
-            if (!canMove(0, 0, currentBlock)) break;
+            if (!canMove(0, 0, currentBlock->shape)) break; 
         }
         block2Board();
         draw();
-        Sleep(sleepTime);
+        Sleep(sleepTime); 
     }
     return 0;
 }
