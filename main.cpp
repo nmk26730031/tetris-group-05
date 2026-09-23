@@ -14,19 +14,19 @@ int sleepTime = 500;
 blocks* currentBlock = nullptr;
 
 void spawnBlock() {
-    x = 5; y = 0; 
+    x = 5; y = 1;
     b = rand() % 7;
     if (currentBlock != nullptr) {
         delete currentBlock;
     }
-    switch(b) {
-        case 0: currentBlock = new block_I(); break;
-        case 1: currentBlock = new block_O(); break;
-        case 2: currentBlock = new block_T(); break;
-        case 3: currentBlock = new block_S(); break;
-        case 4: currentBlock = new block_Z(); break;
-        case 5: currentBlock = new block_J(); break;
-        case 6: currentBlock = new block_L(); break;
+    switch (b) {
+    case 0: currentBlock = new block_I(); break;
+    case 1: currentBlock = new block_O(); break;
+    case 2: currentBlock = new block_T(); break;
+    case 3: currentBlock = new block_S(); break;
+    case 4: currentBlock = new block_Z(); break;
+    case 5: currentBlock = new block_J(); break;
+    case 6: currentBlock = new block_L(); break;
     }
 }
 
@@ -74,21 +74,26 @@ void removeLine() {
     int i, j;
     bool lineRemoved = false;
     for (i = H - 2; i > 0; i--) {
-        for (j = 0; j < W; j++)
+        for (j = 0; j < W - 1; j++)
             if (board[i][j] == ' ') break;
-        if (j == W) { // Nếu dòng đầy
-            for (int ii = i; ii > 0; ii--)
-                for (int jj = 0; jj < W; jj++)
+        if (j == W - 1) { // Nếu dòng đầy
+            for (int ii = i; ii > 1; ii--)
+                for (int jj = 1; jj < W - 1; jj++)
                     board[ii][jj] = board[ii - 1][jj];
-            i++; // Giữ nguyên index để check lại dòng vừa rớt xuống
+
+            for (int jj = 1; jj < W - 1; jj++)
+                board[1][jj] = ' ';
+
+            i++;
             lineRemoved = true;
             draw();
             Sleep(200);
         }
+
     }
     if (lineRemoved) {
         sleepTime -= 20;
-        if (sleepTime < 50) sleepTime = 50; // Giới hạn tốc độ tối đa
+        if (sleepTime < 50) sleepTime = 50;
     }
 }
 
