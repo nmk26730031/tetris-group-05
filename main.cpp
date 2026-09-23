@@ -1,14 +1,17 @@
-﻿#include <iostream>
+#include <iostream>
 #include <conio.h>
+#include <ctime>
+#include <cstdlib>
 #include <windows.h>
-#include <time.h>
+#include "blocks.h"
+
 using namespace std;
 #define H 20
 #define W 15
 char board[H][W] = {};
-char currentBlock[4][4];
 int x, y, b;
 int sleepTime = 500;
+blocks* currentBlock = nullptr;
 char blocks[][4][4] ={
     {{' ','I',' ',' '}, {' ','I',' ',' '}, {' ','I',' ',' '}, {' ','I',' ',' '}}, // I
     {{' ',' ',' ',' '}, {' ','O','O',' '}, {' ','O','O',' '}, {' ',' ',' ',' '}}, // O
@@ -20,10 +23,20 @@ char blocks[][4][4] ={
 };
 
 void spawnBlock() {
-    x = 5; y = 0; b = rand() % 7;
-    for(int i = 0; i < 4; i++)
-        for(int j = 0; j < 4; j++)
-            currentBlock[i][j] = blocks[b][i][j];
+    x = 5; y = 0; 
+    b = rand() % 7;
+    if (currentBlock != nullptr) {
+        delete currentBlock;
+    }
+    switch(b) {
+        case 0: currentBlock = new block_I(); break;
+        case 1: currentBlock = new block_O(); break;
+        case 2: currentBlock = new block_T(); break;
+        case 3: currentBlock = new block_S(); break;
+        case 4: currentBlock = new block_Z(); break;
+        case 5: currentBlock = new block_J(); break;
+        case 6: currentBlock = new block_L(); break;
+    }
 }
 
 bool canMove(int dx, int dy, char checkBlock[4][4]){
