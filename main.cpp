@@ -1,14 +1,17 @@
-﻿#include <iostream>
+#include <iostream>
 #include <conio.h>
+#include <ctime>
+#include <cstdlib>
 #include <windows.h>
-#include <time.h>
+#include "blocks.h"
+
 using namespace std;
 #define H 20
 #define W 15
 char board[H][W] = {};
-char currentBlock[4][4];
 int x, y, b;
 int sleepTime = 500;
+blocks* currentBlock = nullptr;
 char blocks[][4][4] ={
     {{' ','I',' ',' '}, {' ','I',' ',' '}, {' ','I',' ',' '}, {' ','I',' ',' '}}, // I
     {{' ',' ',' ',' '}, {' ','O','O',' '}, {' ','O','O',' '}, {' ',' ',' ',' '}}, // O
@@ -20,10 +23,20 @@ char blocks[][4][4] ={
 };
 
 void spawnBlock() {
-    x = 5; y = 0; b = rand() % 7;
-    for(int i = 0; i < 4; i++)
-        for(int j = 0; j < 4; j++)
-            currentBlock[i][j] = blocks[b][i][j];
+    x = 5; y = 0; 
+    b = rand() % 7;
+    if (currentBlock != nullptr) {
+        delete currentBlock;
+    }
+    switch(b) {
+        case 0: currentBlock = new block_I(); break;
+        case 1: currentBlock = new block_O(); break;
+        case 2: currentBlock = new block_T(); break;
+        case 3: currentBlock = new block_S(); break;
+        case 4: currentBlock = new block_Z(); break;
+        case 5: currentBlock = new block_J(); break;
+        case 6: currentBlock = new block_L(); break;
+    }
 }
 
 bool canMove(int dx, int dy, char checkBlock[4][4]){
@@ -40,13 +53,13 @@ bool canMove(int dx, int dy, char checkBlock[4][4]){
 void block2Board(){
     for (int i = 0; i < 4; i++ )
         for (int j = 0; j < 4; j++ )
-           if (currentBlock[i][j] != ' ')
-                board[y+i][x+j] = currentBlock[i][j];
+            if (currentBlock->shape[i][j] != ' ')
+                board[y+i][x+j] = currentBlock->shape[i][j];
 }
 void boardDelBlock(){
     for (int i = 0; i < 4; i++ )
         for (int j = 0; j < 4; j++ )
-            if (currentBlock[i][j] != ' ')
+            if (currentBlock->shape[i][j] != ' ')
                 board[y+i][x+j] = ' ';
 }
 void initBoard(){
@@ -105,29 +118,29 @@ void rotateBlock() {
 int main()
 {
     srand(time(0));
-    x = 5; y = 0; b = rand()%7;
     initBoard();
     spawnBlock();
+    
     while (1){
         boardDelBlock();
         if (kbhit()){
             char c = getch();
-            if (c == 'a' && canMove(-1,0,currentBlock)) x--;
-            if (c == 'd' && canMove( 1,0, currentBlock)) x++;
-            if (c == 's' && canMove( 0, 1, currentBlock)) y++;
-            if (c == 'w') rotateBlock();
+            if (c == 'a' && canMove(-1, 0, currentBlock->shape)) x--;
+            if (c == 'd' && canMove( 1, 0, currentBlock->shape)) x++;
+            if (c == 's' && canMove( 0, 1, currentBlock->shape)) y++; 
+            if (c == 'w') currentBlock->rotateBlock();                       
             if (c == 'q') break;
         }
-        if (canMove(0,1, currentBlock)) y++;
+        if (canMove(0, 1, currentBlock->shape)) y++;
         else{
             block2Board();
             removeLine();
             spawnBlock();
-            if (!canMove(0, 0, currentBlock)) break;
+            if (!canMove(0, 0, currentBlock->shape)) break; 
         }
         block2Board();
         draw();
-        Sleep(sleepTime);
+        Sleep(sleepTime); 
     }
     return 0;
 }
