@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
 #include <ctime>
 #include <cstdlib>
@@ -12,15 +12,6 @@ char board[H][W] = {};
 int x, y, b;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
-char blocks[][4][4] ={
-    {{' ','I',' ',' '}, {' ','I',' ',' '}, {' ','I',' ',' '}, {' ','I',' ',' '}}, // I
-    {{' ',' ',' ',' '}, {' ','O','O',' '}, {' ','O','O',' '}, {' ',' ',' ',' '}}, // O
-    {{' ',' ',' ',' '}, {' ','T',' ',' '}, {'T','T','T',' '}, {' ',' ',' ',' '}}, // T
-    {{' ',' ',' ',' '}, {' ','S','S',' '}, {'S','S',' ',' '}, {' ',' ',' ',' '}}, // S
-    {{' ',' ',' ',' '}, {'Z','Z',' ',' '}, {' ','Z','Z',' '}, {' ',' ',' ',' '}}, // Z
-    {{' ',' ',' ',' '}, {'J',' ',' ',' '}, {'J','J','J',' '}, {' ',' ',' ',' '}}, // J
-    {{' ',' ',' ',' '}, {' ',' ','L',' '}, {'L','L','L',' '}, {' ',' ',' ',' '}}  // L
-};
 
 void spawnBlock() {
     x = 5; y = 0; 
@@ -101,19 +92,6 @@ void removeLine() {
     }
 }
 
-void rotateBlock() {
-    char temp[4][4];
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            temp[j][3-i] = currentBlock[i][j];
-        }
-    }
-    if (canMove(0, 0, temp)) {
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 4; j++)
-                currentBlock[i][j] = temp[i][j];
-    }
-}
 
 int main()
 {
