@@ -88,9 +88,9 @@ void draw(){
 }
 void removeLine() {
     int i, j;
-    bool lineRemoved = false;
+    int linesClear = 0;
     for (i = H - 2; i > 0; i--) {
-        for (j = 0; j < W - 1; j++)
+        for (j = 1; j < W - 1; j++)
             if (board[i][j] == ' ') break;
         if (j == W - 1) { // Nếu dòng đầy
             for (int ii = i; ii > 1; ii--)
@@ -101,18 +101,15 @@ void removeLine() {
                 board[1][jj] = ' ';
 
             i++;
-            lineRemoved = true;
-            draw();
-            Sleep(200);
+            linesClear++;
         }
 
     }
-    if (lineRemoved) {
+    if (linesClear > 0) {
         sleepTime -= 20;
         if (sleepTime < 50) sleepTime = 50;
     }
 }
-
 
 int main()
 {
