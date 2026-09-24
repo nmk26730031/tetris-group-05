@@ -4,6 +4,9 @@
 #include <cstdlib>
 #include <windows.h>
 #include "blocks.h"
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
 
 using namespace std;
 #define H 20
