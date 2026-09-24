@@ -13,6 +13,13 @@ int x, y, b;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
 
+void gotoxy(int x, int y) {
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
 void spawnBlock() {
     x = 5; y = 1;
     b = rand() % 7;
@@ -60,7 +67,7 @@ void initBoard(){
             else board[i][j] = ' ';
 }
 void draw(){
-    system("cls");
+    gotoxy(0, 0);
     for (int i = 0 ; i < H ; i++) {
         for (int j = 0 ; j < W ; j++) {
             if (board[i][j] == '#') cout << "##";       // Vẽ viền
