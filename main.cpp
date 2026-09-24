@@ -1,9 +1,12 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
 #include <ctime>
 #include <cstdlib>
 #include <windows.h>
 #include "blocks.h"
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
 
 using namespace std;
 #define H 20
@@ -79,15 +82,27 @@ void draw(){
     gotoxy(0, 0);
     for (int i = 0 ; i < H ; i++) {
         for (int j = 0 ; j < W ; j++) {
-            if (board[i][j] == '#') cout << "##";       // Vẽ viền
-            else if (board[i][j] != ' ') cout << "[]";  // Vẽ block
-            else cout << "  ";                        // Vẽ khoảng trống
+            if (board[i][j] == '#') cout << "\x1b[38;5;242m▓▓\x1b[0m";       
+            else if (board[i][j] != ' ') {
+                switch (board[i][j]) {
+                    case 'O': cout << "\x1b[38;5;226m"; break; // Yellow O
+                    case 'I': cout << "\x1b[38;5;51m"; break;  // Cyan I
+                    case 'Z': cout << "\x1b[38;5;46m"; break;  // Green Z
+                    case 'S': cout << "\x1b[38;5;196m"; break; // Red S
+                    case 'L': cout << "\x1b[38;5;214m"; break; // Orange L
+                    case 'J': cout << "\x1b[38;5;213m"; break; // Pink J
+                    case 'T': cout << "\x1b[38;5;129m"; break; // Violet/Purple T
+                }
+                cout << "■ \x1b[0m";
+            } else cout << "  ";                        
         }
         cout << endl;
     }
-    gotoxy(W * 2 + 5, 2);
-    cout << "SCORE: " << score << "    ";
+    cout << "\x1b[0m";
+    gotoxy(W * 2 + 5, 4); 
+    cout << "SCORE: " << score << " ";
 }
+
 void removeLine() {
     int i, j;
     int linesCleared = 0; // Biến đếm số hàng xóa được cùng lúc
@@ -125,6 +140,14 @@ void removeLine() {
 
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
+
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD dwMode = 0;
+    GetConsoleMode(hOut, &dwMode);
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, dwMode);
+
     hideCursor();
     srand(time(0));
     initBoard();
