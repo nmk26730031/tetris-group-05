@@ -130,41 +130,36 @@ int main()
     while (1){
         bool stateChanged = false; // Biến chỉ vẽ lại khi có sự thay đổi để mượt hơn
         boardDelBlock();
+
         if (kbhit()){
             int c = getch();
-            if (c == 'a' && canMove(-1, 0, currentBlock->shape)) {
-                x--;
-                stateChanged = true;}
-            if (c == 'd' && canMove( 1, 0, currentBlock->shape)) {
-                x++;
-                stateChanged = true;
+            if (c == 224 || c == 0) {
+                c = getch();
+                if (c == 75 && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; } // TRÁI
+                if (c == 77 && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; } // PHẢI
+                if (c == 80 && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; } // XUỐNG
+                if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                       // XOAY
+            } 
+            else {
+                if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
+                if ((c == 'd' || c == 'D') && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; }
+                if ((c == 's' || c == 'S') && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; }
+                if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
+                if (c == 'q' || c == 'Q') break;
             }
-            if (c == 's' && canMove( 0, 1, currentBlock->shape)) {
-                y++;
-                stateChanged = true;
-            }
-            if (c == 's' && canMove( 0, 1, currentBlock->shape)) {
-                y++;
-                stateChanged = true;
-            }
-            if (c == 'w') {
-                currentBlock->rotateBlock();   
-                stateChanged = true; // Block đã xoay, cần vẽ lại
-            }                    
-            if (c == 'q') break;
         }
-        
+
         DWORD currentTime = GetTickCount();
         if (currentTime - lastDropTime >= (DWORD)sleepTime) {
             if (canMove(0, 1, currentBlock->shape)) {
                 y++;
-                stateChanged = true; // Block đã di chuyển xuống, cần vẽ lại
+                stateChanged = true; // Block đã di chuyển xuống -> vẽ lại
             } else {
                 block2Board();
                 removeLine();
                 spawnBlock();
                 if (!canMove(0, 0, currentBlock->shape)) break; 
-                stateChanged = true; // Block mới xuất hiện, cần vẽ lại
+                stateChanged = true; // Block mới xuất hiện -> vẽ lại
             }
             lastDropTime = currentTime;
         }
