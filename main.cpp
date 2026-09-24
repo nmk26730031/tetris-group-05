@@ -20,6 +20,14 @@ void gotoxy(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+void hideCursor() {
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    info.dwSize = 100;
+    info.bVisible = FALSE;
+    SetConsoleCursorInfo(consoleHandle, &info);
+}
+
 void spawnBlock() {
     x = 5; y = 1;
     b = rand() % 7;
@@ -107,6 +115,7 @@ void removeLine() {
 
 int main()
 {
+    hideCursor();
     srand(time(0));
     initBoard();
     spawnBlock();
