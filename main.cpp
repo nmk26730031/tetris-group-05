@@ -119,15 +119,38 @@ int main()
     srand(time(0));
     initBoard();
     spawnBlock();
+
+    // Lưu thời điểm cuối cùng block tự động rơi
+    DWORD lastDropTime = GetTickCount();
+
+    // Vẽ khung hình đầu tiên trước khi vào vòng lặp
+    block2Board();
+    draw();
     
     while (1){
+        bool stateChanged = false; // Biến chỉ vẽ lại khi có sự thay đổi để mượt hơn
         boardDelBlock();
         if (kbhit()){
-            char c = getch();
-            if (c == 'a' && canMove(-1, 0, currentBlock->shape)) x--;
-            if (c == 'd' && canMove( 1, 0, currentBlock->shape)) x++;
-            if (c == 's' && canMove( 0, 1, currentBlock->shape)) y++; 
-            if (c == 'w') currentBlock->rotateBlock();                       
+            int c = getch();
+            if (c == 'a' && canMove(-1, 0, currentBlock->shape)) {
+                x--;
+                stateChanged = true;}
+            if (c == 'd' && canMove( 1, 0, currentBlock->shape)) {
+                x++;
+                stateChanged = true;
+            }
+            if (c == 's' && canMove( 0, 1, currentBlock->shape)) {
+                y++;
+                stateChanged = true;
+            }
+            if (c == 's' && canMove( 0, 1, currentBlock->shape)) {
+                y++;
+                stateChanged = true;
+            }
+            if (c == 'w') {
+                currentBlock->rotateBlock();   
+                stateChanged = true; // Block đã xoay, cần vẽ lại
+            }                    
             if (c == 'q') break;
         }
         if (canMove(0, 1, currentBlock->shape)) y++;
