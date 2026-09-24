@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <conio.h>
 #include <ctime>
 #include <cstdlib>
@@ -119,36 +119,55 @@ int main()
     srand(time(0));
     initBoard();
     spawnBlock();
+
+    // Lưu thời điểm cuối cùng block tự động rơi
+    DWORD lastDropTime = GetTickCount();
+
+    // Vẽ khung hình đầu tiên trước khi vào vòng lặp
+    block2Board();
+    draw();
     
     while (1){
+        bool stateChanged = false; // Biến chỉ vẽ lại khi có sự thay đổi để mượt hơn
         boardDelBlock();
+
         if (kbhit()){
             int c = getch();
             if (c == 224 || c == 0) {
-                c = getch(); // Gọi getch() lần 2 để lấy mã phím thực sự
-                if (c == 75 && canMove(-1, 0, currentBlock->shape)) x--;      // Mũi tên TRÁI
-                if (c == 77 && canMove(1, 0, currentBlock->shape)) x++;      // Mũi tên PHẢI
-                if (c == 80 && canMove(0, 1, currentBlock->shape)) y++;      // Mũi tên XUỐNG
-                if (c == 72) currentBlock->rotateBlock();                    // Mũi tên LÊN (xoay)
-            }
+                c = getch();
+                if (c == 75 && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; } // TRÁI
+                if (c == 77 && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; } // PHẢI
+                if (c == 80 && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; } // XUỐNG
+                if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
+            } 
             else {
-                // Thêm chữ Hoa và chữ thường
-                if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) x--;
-                if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) x++;
-                if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) y++;
-                if ((c == 'w' || c == 'W')) currentBlock->rotateBlock();
-                if (c == 'q') break;
+                if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
+                if ((c == 'd' || c == 'D') && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; }
+                if ((c == 's' || c == 'S') && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; }
+                if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
+                if (c == 'q' || c == 'Q') break;
             }
-            if (canMove(0, 1, currentBlock->shape)) y++;
-            else {
+        }
+
+        DWORD currentTime = GetTickCount();
+        if (currentTime - lastDropTime >= (DWORD)sleepTime) {
+            if (canMove(0, 1, currentBlock->shape)) {
+                y++;
+                stateChanged = true; // Block đã di chuyển xuống -> vẽ lại
+            } else {
                 block2Board();
                 removeLine();
                 spawnBlock();
-                if (!canMove(0, 0, currentBlock->shape)) break;
+                if (!canMove(0, 0, currentBlock->shape)) break; 
+                stateChanged = true; // Block mới xuất hiện -> vẽ lại
             }
-            block2Board();
+            lastDropTime = currentTime;
+        }
+        block2Board();
+        if (stateChanged) {
             draw();
-            Sleep(sleepTime);
+        }
+        Sleep(20); 
     }
     return 0;
 }
