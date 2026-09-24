@@ -10,6 +10,7 @@ using namespace std;
 #define W 15
 char board[H][W] = {};
 int x, y, b;
+int score = 0;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
 
@@ -126,7 +127,7 @@ int main()
     // Vẽ khung hình đầu tiên trước khi vào vòng lặp
     block2Board();
     draw();
-    
+
     while (1){
         bool stateChanged = false; // Biến chỉ vẽ lại khi có sự thay đổi để mượt hơn
         boardDelBlock();
@@ -139,7 +140,7 @@ int main()
                 if (c == 77 && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; } // PHẢI
                 if (c == 80 && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; } // XUỐNG
                 if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
-            } 
+            }
             else {
                 if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
                 if ((c == 'd' || c == 'D') && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; }
@@ -158,7 +159,7 @@ int main()
                 block2Board();
                 removeLine();
                 spawnBlock();
-                if (!canMove(0, 0, currentBlock->shape)) break; 
+                if (!canMove(0, 0, currentBlock->shape)) break;
                 stateChanged = true; // Block mới xuất hiện -> vẽ lại
             }
             lastDropTime = currentTime;
@@ -167,7 +168,7 @@ int main()
         if (stateChanged) {
             draw();
         }
-        Sleep(20); 
+        Sleep(20);
     }
     return 0;
 }
