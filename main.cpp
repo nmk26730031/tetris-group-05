@@ -123,7 +123,7 @@ int main()
     while (1){
         boardDelBlock();
         if (kbhit()){
-            char c = getch();
+            int c = getch();
             if (c == 'a' && canMove(-1, 0, currentBlock->shape)) x--;
             if (c == 'd' && canMove( 1, 0, currentBlock->shape)) x++;
             if (c == 's' && canMove( 0, 1, currentBlock->shape)) y++; 
