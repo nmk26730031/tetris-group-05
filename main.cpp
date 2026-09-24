@@ -88,24 +88,34 @@ void draw(){
 }
 void removeLine() {
     int i, j;
-    int linesClear = 0;
+    int linesCleared = 0; // Biến đếm số hàng xóa được cùng lúc
+
     for (i = H - 2; i > 0; i--) {
-        for (j = 1; j < W - 1; j++)
+        for (j = 1; j < W - 1; j++) // Chỉ quét khoảng trống bên trong viền (1 đến W-2)
             if (board[i][j] == ' ') break;
+
         if (j == W - 1) { // Nếu dòng đầy
             for (int ii = i; ii > 1; ii--)
                 for (int jj = 1; jj < W - 1; jj++)
                     board[ii][jj] = board[ii - 1][jj];
 
+            // Làm rỗng dòng cao nhất (ngay dưới viền) để dọn chỗ trống
             for (int jj = 1; jj < W - 1; jj++)
                 board[1][jj] = ' ';
 
-            i++;
-            linesClear++;
+            i++; // Giữ nguyên index để check lại dòng vừa bị kéo xuống
+            linesCleared++; // Tăng biến đếm khi xóa thành công 1 hàng
         }
-
     }
-    if (linesClear > 0) {
+
+    // Tính điểm
+    if (linesCleared == 1) score += 100;
+    else if (linesCleared == 2) score += 300;
+    else if (linesCleared == 3) score += 500;
+    else if (linesCleared >= 4) score += 800;
+
+    // Tăng độ khó bằng cách giảm thời gian rơi của block nếu có dòng bị xóa
+    if (linesCleared > 0) {
         sleepTime -= 20;
         if (sleepTime < 50) sleepTime = 50;
     }
