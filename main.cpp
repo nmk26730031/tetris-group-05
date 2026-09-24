@@ -99,7 +99,7 @@ void draw(){
         cout << endl;
     }
     cout << "\x1b[0m";
-    gotoxy(W * 2 + 5, 2); 
+    gotoxy(W * 2 + 5, 4); 
     cout << "SCORE: " << score << " ";
 }
 
