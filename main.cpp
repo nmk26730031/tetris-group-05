@@ -82,15 +82,16 @@ void draw(){
     gotoxy(0, 0);
     for (int i = 0 ; i < H ; i++) {
         for (int j = 0 ; j < W ; j++) {
-            if (board[i][j] == '#') cout << "▓▓";       // Vẽ viền
-            else if (board[i][j] != ' ') cout << "■ ";  // Vẽ block
-            else cout << "  ";                        // Vẽ khoảng trống
+            if (board[i][j] == '#') cout << "\x1b[38;5;242m▓▓\x1b[0m";      
+            else if (board[i][j] != ' ') cout << "■ "; 
+            else cout << "  ";                        
         }
         cout << endl;
     }
-    gotoxy(W * 2 + 5, 2);
-    cout << "SCORE: " << score << "    ";
+    gotoxy(W * 2 + 5, 2); 
+    cout << "SCORE: " << score << " ";
 }
+
 void removeLine() {
     int i, j;
     int linesCleared = 0; // Biến đếm số hàng xóa được cùng lúc
