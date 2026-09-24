@@ -145,7 +145,7 @@ int main()
                 c = getch();
                 if (c == 75 && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; } // TRÁI
                 if (c == 77 && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; } // PHẢI
-                if (c == 80 && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; } // XUỐNG
+                if (c == 80 && canMove( 0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; } // XUỐNG
                 if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
             }
             else {
