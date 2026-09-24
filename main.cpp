@@ -85,6 +85,8 @@ void draw(){
         }
         cout << endl;
     }
+    gotoxy(W * 2 + 5, 2);
+    cout << "SCORE: " << score << "    ";
 }
 void removeLine() {
     int i, j;
