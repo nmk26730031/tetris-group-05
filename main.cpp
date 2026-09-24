@@ -153,16 +153,26 @@ int main()
             }                    
             if (c == 'q') break;
         }
-        if (canMove(0, 1, currentBlock->shape)) y++;
-        else{
-            block2Board();
-            removeLine();
-            spawnBlock();
-            if (!canMove(0, 0, currentBlock->shape)) break; 
+        
+        DWORD currentTime = GetTickCount();
+        if (currentTime - lastDropTime >= (DWORD)sleepTime) {
+            if (canMove(0, 1, currentBlock->shape)) {
+                y++;
+                stateChanged = true; // Block đã di chuyển xuống, cần vẽ lại
+            } else {
+                block2Board();
+                removeLine();
+                spawnBlock();
+                if (!canMove(0, 0, currentBlock->shape)) break; 
+                stateChanged = true; // Block mới xuất hiện, cần vẽ lại
+            }
+            lastDropTime = currentTime;
         }
         block2Board();
-        draw();
-        Sleep(sleepTime); 
+        if (stateChanged) {
+            draw();
+        }
+        Sleep(20); 
     }
     return 0;
 }
