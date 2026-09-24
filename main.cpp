@@ -10,6 +10,7 @@ using namespace std;
 #define W 15
 char board[H][W] = {};
 int x, y, b;
+int score = 0;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
 
@@ -84,34 +85,43 @@ void draw(){
         }
         cout << endl;
     }
+    gotoxy(W * 2 + 5, 2);
+    cout << "SCORE: " << score << "    ";
 }
 void removeLine() {
     int i, j;
-    bool lineRemoved = false;
+    int linesCleared = 0; // Biến đếm số hàng xóa được cùng lúc
+
     for (i = H - 2; i > 0; i--) {
-        for (j = 0; j < W - 1; j++)
+        for (j = 1; j < W - 1; j++) // Chỉ quét khoảng trống bên trong viền (1 đến W-2)
             if (board[i][j] == ' ') break;
+
         if (j == W - 1) { // Nếu dòng đầy
             for (int ii = i; ii > 1; ii--)
                 for (int jj = 1; jj < W - 1; jj++)
                     board[ii][jj] = board[ii - 1][jj];
 
+            // Làm rỗng dòng cao nhất (ngay dưới viền) để dọn chỗ trống
             for (int jj = 1; jj < W - 1; jj++)
                 board[1][jj] = ' ';
 
-            i++;
-            lineRemoved = true;
-            draw();
-            Sleep(200);
+            i++; // Giữ nguyên index để check lại dòng vừa bị kéo xuống
+            linesCleared++; // Tăng biến đếm khi xóa thành công 1 hàng
         }
-
     }
-    if (lineRemoved) {
+
+    // Tính điểm
+    if (linesCleared == 1) score += 100;
+    else if (linesCleared == 2) score += 300;
+    else if (linesCleared == 3) score += 500;
+    else if (linesCleared >= 4) score += 800;
+
+    // Tăng độ khó bằng cách giảm thời gian rơi của block nếu có dòng bị xóa
+    if (linesCleared > 0) {
         sleepTime -= 20;
         if (sleepTime < 50) sleepTime = 50;
     }
 }
-
 
 int main()
 {
@@ -126,7 +136,7 @@ int main()
     // Vẽ khung hình đầu tiên trước khi vào vòng lặp
     block2Board();
     draw();
-    
+
     while (1){
         bool stateChanged = false; // Biến chỉ vẽ lại khi có sự thay đổi để mượt hơn
         boardDelBlock();
@@ -137,13 +147,13 @@ int main()
                 c = getch();
                 if (c == 75 && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; } // TRÁI
                 if (c == 77 && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; } // PHẢI
-                if (c == 80 && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; } // XUỐNG
+                if (c == 80 && canMove( 0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; } // XUỐNG
                 if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
-            } 
+            }
             else {
                 if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
                 if ((c == 'd' || c == 'D') && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; }
-                if ((c == 's' || c == 'S') && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; }
+                if ((c == 's' || c == 'S') && canMove( 0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
                 if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
                 if (c == 'q' || c == 'Q') break;
             }
@@ -158,7 +168,7 @@ int main()
                 block2Board();
                 removeLine();
                 spawnBlock();
-                if (!canMove(0, 0, currentBlock->shape)) break; 
+                if (!canMove(0, 0, currentBlock->shape)) break;
                 stateChanged = true; // Block mới xuất hiện -> vẽ lại
             }
             lastDropTime = currentTime;
@@ -167,7 +177,7 @@ int main()
         if (stateChanged) {
             draw();
         }
-        Sleep(20); 
+        Sleep(20);
     }
     return 0;
 }
