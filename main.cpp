@@ -124,23 +124,31 @@ int main()
         boardDelBlock();
         if (kbhit()){
             int c = getch();
-            // Thêm chữ Hoa và chữ thường
-            if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) x--;
-            if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) x++;
-            if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) y++;
-            if ((c == 'w' || c == 'W')) currentBlock->rotateBlock();
-            if (c == 'q') break;
-        }
-        if (canMove(0, 1, currentBlock->shape)) y++;
-        else{
+            if (c == 224 || c == 0) {
+                c = getch(); // Gọi getch() lần 2 để lấy mã phím thực sự
+                if (c == 75 && canMove(-1, 0, currentBlock->shape)) x--;      // Mũi tên TRÁI
+                if (c == 77 && canMove(1, 0, currentBlock->shape)) x++;      // Mũi tên PHẢI
+                if (c == 80 && canMove(0, 1, currentBlock->shape)) y++;      // Mũi tên XUỐNG
+                if (c == 72) currentBlock->rotateBlock();                    // Mũi tên LÊN (xoay)
+            }
+            else {
+                // Thêm chữ Hoa và chữ thường
+                if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) x--;
+                if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) x++;
+                if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) y++;
+                if ((c == 'w' || c == 'W')) currentBlock->rotateBlock();
+                if (c == 'q') break;
+            }
+            if (canMove(0, 1, currentBlock->shape)) y++;
+            else {
+                block2Board();
+                removeLine();
+                spawnBlock();
+                if (!canMove(0, 0, currentBlock->shape)) break;
+            }
             block2Board();
-            removeLine();
-            spawnBlock();
-            if (!canMove(0, 0, currentBlock->shape)) break; 
-        }
-        block2Board();
-        draw();
-        Sleep(sleepTime); 
+            draw();
+            Sleep(sleepTime);
     }
     return 0;
 }
