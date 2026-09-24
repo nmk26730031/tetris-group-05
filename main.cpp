@@ -151,7 +151,7 @@ int main()
             else {
                 if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
                 if ((c == 'd' || c == 'D') && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; }
-                if ((c == 's' || c == 'S') && canMove( 0, 1, currentBlock->shape)) { y++; stateChanged = true; }
+                if ((c == 's' || c == 'S') && canMove( 0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
                 if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
                 if (c == 'q' || c == 'Q') break;
             }
