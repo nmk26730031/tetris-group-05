@@ -124,10 +124,11 @@ int main()
         boardDelBlock();
         if (kbhit()){
             int c = getch();
-            if (c == 'a' && canMove(-1, 0, currentBlock->shape)) x--;
-            if (c == 'd' && canMove( 1, 0, currentBlock->shape)) x++;
-            if (c == 's' && canMove( 0, 1, currentBlock->shape)) y++; 
-            if (c == 'w') currentBlock->rotateBlock();                       
+            // Thêm chữ Hoa và chữ thường
+            if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) x--;
+            if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) x++;
+            if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) y++;
+            if ((c == 'w' || c == 'W')) currentBlock->rotateBlock();
             if (c == 'q') break;
         }
         if (canMove(0, 1, currentBlock->shape)) y++;
