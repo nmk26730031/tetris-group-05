@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
 #include <ctime>
 #include <cstdlib>
@@ -79,7 +79,7 @@ void draw(){
     gotoxy(0, 0);
     for (int i = 0 ; i < H ; i++) {
         for (int j = 0 ; j < W ; j++) {
-            if (board[i][j] == '#') cout << "##";       // Vẽ viền
+            if (board[i][j] == '#') cout << "▓▓";       // Vẽ viền
             else if (board[i][j] != ' ') cout << "[]";  // Vẽ block
             else cout << "  ";                        // Vẽ khoảng trống
         }
