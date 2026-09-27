@@ -50,58 +50,62 @@ void spawnBlock() {
     }
 }
 
-bool canMove(int dx, int dy, char checkBlock[4][4]){
-    for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
+bool canMove(int dx, int dy, char checkBlock[4][4]) {
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
             if (checkBlock[i][j] != ' ') {
                 int xt = x + j + dx;
                 int yt = y + i + dy;
-                if (xt < 1 || xt >= W-1 || yt >= H-1 ) return false;
+                if (xt < 1 || xt >= W - 1 || yt >= H - 1) return false;
                 if (board[yt][xt] != ' ') return false;
             }
     return true;
 }
-void block2Board(){
-    for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
+void block2Board() {
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
             if (currentBlock->shape[i][j] != ' ')
-                board[y+i][x+j] = currentBlock->shape[i][j];
+                board[y + i][x + j] = currentBlock->shape[i][j];
 }
-void boardDelBlock(){
-    for (int i = 0; i < 4; i++ )
-        for (int j = 0; j < 4; j++ )
+void boardDelBlock() {
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
             if (currentBlock->shape[i][j] != ' ')
-                board[y+i][x+j] = ' ';
+                board[y + i][x + j] = ' ';
 }
-void initBoard(){
-    for (int i = 0 ; i < H ; i++)
-        for (int j = 0 ; j < W ; j++)
-            if (i == 0 || i == H-1 || j ==0 || j == W-1) board[i][j] = '#';
+void initBoard() {
+    for (int i = 0; i < H; i++)
+        for (int j = 0; j < W; j++)
+            if (i == 0 || i == H - 1 || j == 0 || j == W - 1) board[i][j] = '#';
             else board[i][j] = ' ';
 }
-void draw(){
+void draw() {
     gotoxy(0, 0);
-    for (int i = 0 ; i < H ; i++) {
-        for (int j = 0 ; j < W ; j++) {
-            if (board[i][j] == '#') cout << "\x1b[38;5;242m▓▓\x1b[0m";       
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < W; j++) {
+            if (board[i][j] == '#') cout << "\x1b[38;5;242m▓▓\x1b[0m";
             else if (board[i][j] != ' ') {
                 switch (board[i][j]) {
-                    case 'O': cout << "\x1b[38;5;226m"; break; // Yellow O
-                    case 'I': cout << "\x1b[38;5;51m"; break;  // Cyan I
-                    case 'Z': cout << "\x1b[38;5;46m"; break;  // Green Z
-                    case 'S': cout << "\x1b[38;5;196m"; break; // Red S
-                    case 'L': cout << "\x1b[38;5;214m"; break; // Orange L
-                    case 'J': cout << "\x1b[38;5;213m"; break; // Pink J
-                    case 'T': cout << "\x1b[38;5;129m"; break; // Violet/Purple T
+                case 'O': cout << "\x1b[38;5;226m"; break; // Yellow O
+                case 'I': cout << "\x1b[38;5;51m"; break;  // Cyan I
+                case 'Z': cout << "\x1b[38;5;46m"; break;  // Green Z
+                case 'S': cout << "\x1b[38;5;196m"; break; // Red S
+                case 'L': cout << "\x1b[38;5;214m"; break; // Orange L
+                case 'J': cout << "\x1b[38;5;213m"; break; // Pink J
+                case 'T': cout << "\x1b[38;5;129m"; break; // Violet/Purple T
                 }
                 cout << "■ \x1b[0m";
-            } else cout << "  ";                        
+            }
+            else cout << "  ";
         }
         cout << endl;
     }
     cout << "\x1b[0m";
-    gotoxy(W * 2 + 5, 4); 
+    gotoxy(W * 2 + 5, 4);
     cout << "SCORE: " << score << " ";
+    gotoxy(W * 2 + 5, 6);
+    if (isPaused) cout << ">>> PAUSED <<<";
+    else cout << "              ";
 }
 
 void removeLine() {
@@ -142,7 +146,7 @@ void removeLine() {
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
-    
+
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD dwMode = 0;
     GetConsoleMode(hOut, &dwMode);
@@ -161,26 +165,28 @@ int main()
     block2Board();
     draw();
 
-    while (1){
+    while (1) {
         bool stateChanged = false; // Biến chỉ vẽ lại khi có sự thay đổi để mượt hơn
         boardDelBlock();
 
-        if (kbhit()){
-            int c = getch();
+        if (_kbhit()) {
+            int c = _getch();
             if (c == 224 || c == 0) {
-                c = getch();
+                c = _getch();
                 // Chỉ cho phép di chuyển khi KHÔNG tạm dừng
                 if (!isPaused) {
                     if (c == 75 && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; } // TRÁI
                     if (c == 77 && canMove(1, 0, currentBlock->shape)) { x++; stateChanged = true; } // PHẢI
                     if (c == 80 && canMove(0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; } // XUỐNG
                     if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
-                } else {
+                }
+                else {
                     // Nhấn P để dừng game
                     if (c == 'p' || c == 'P') {
-                    isPaused = !isPaused;
-                    stateChanged = true; // Gọi để in PAUSED bên phải màn hình
-                    } else if (c == 'q' || c == 'Q') break;
+                        isPaused = !isPaused;
+                        stateChanged = true; // Gọi để in PAUSED bên phải màn hình
+                    }
+                    else if (c == 'q' || c == 'Q') break;
                     // Chỉ cho phép di chuyển khi KHÔNG tạm dừng
                     else if (!isPaused) {
                         if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
@@ -189,32 +195,34 @@ int main()
                         if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
                     }
                 }
-        }
-
-        DWORD currentTime = GetTickCount();
-        if (isPaused) {
-            // Đóng băng mốc thời gian
-            lastDropTime = currentTime;
-        }
-        else if (currentTime - lastDropTime >= (DWORD)sleepTime) {
-            // Logic trong đây giữ nguyên
-            if (canMove(0, 1, currentBlock->shape)) {
-                y++;
-                stateChanged = true; // Block đã di chuyển xuống -> vẽ lại
-            } else {
-                block2Board();
-                removeLine();
-                spawnBlock();
-                if (!canMove(0, 0, currentBlock->shape)) break;
-                stateChanged = true; // Block mới xuất hiện -> vẽ lại
             }
-            lastDropTime = currentTime;
+
+            DWORD currentTime = GetTickCount();
+            if (isPaused) {
+                // Đóng băng mốc thời gian
+                lastDropTime = currentTime;
+            }
+            else if (currentTime - lastDropTime >= (DWORD)sleepTime) {
+                // Logic trong đây giữ nguyên
+                if (canMove(0, 1, currentBlock->shape)) {
+                    y++;
+                    stateChanged = true; // Block đã di chuyển xuống -> vẽ lại
+                }
+                else {
+                    block2Board();
+                    removeLine();
+                    spawnBlock();
+                    if (!canMove(0, 0, currentBlock->shape)) break;
+                    stateChanged = true; // Block mới xuất hiện -> vẽ lại
+                }
+                lastDropTime = currentTime;
+            }
+            block2Board();
+            if (stateChanged) {
+                draw();
+            }
+            Sleep(20);
         }
-        block2Board();
-        if (stateChanged) {
-            draw();
-        }
-        Sleep(20);
+        return 0;
     }
-    return 0;
 }
