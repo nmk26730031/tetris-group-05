@@ -179,13 +179,14 @@ int main()
                 if (c == 'p' || c == 'P') {
                     isPaused = !isPaused;
                     stateChanged = true; // Gọi để in PAUSED bên phải màn hình
+                } else if (c == 'q' || c == 'Q') break;
+                // Chỉ cho phép di chuyển khi KHÔNG tạm dừng
+                else if (!isPaused) {
+                    if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
+                    if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) { x++; stateChanged = true; }
+                    if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
+                    if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
                 }
-
-                if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
-                if ((c == 'd' || c == 'D') && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; }
-                if ((c == 's' || c == 'S') && canMove( 0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
-                if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
-                if (c == 'q' || c == 'Q') break;
             }
         }
 
