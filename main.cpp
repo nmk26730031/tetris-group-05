@@ -192,7 +192,12 @@ int main()
         }
 
         DWORD currentTime = GetTickCount();
-        if (currentTime - lastDropTime >= (DWORD)sleepTime) {
+        if (isPaused) {
+            // Đóng băng mốc thời gian
+            lastDropTime = currentTime;
+        }
+        else if (currentTime - lastDropTime >= (DWORD)sleepTime) {
+            // Logic trong đây giữ nguyên
             if (canMove(0, 1, currentBlock->shape)) {
                 y++;
                 stateChanged = true; // Block đã di chuyển xuống -> vẽ lại
