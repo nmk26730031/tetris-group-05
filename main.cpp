@@ -14,6 +14,7 @@ using namespace std;
 char board[H][W] = {};
 int x, y, b;
 int score = 0;
+bool isPaused = false;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
 
@@ -141,7 +142,7 @@ void removeLine() {
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
-
+    
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD dwMode = 0;
     GetConsoleMode(hOut, &dwMode);
