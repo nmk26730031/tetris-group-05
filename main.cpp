@@ -169,25 +169,26 @@ int main()
             int c = getch();
             if (c == 224 || c == 0) {
                 c = getch();
-                if (c == 75 && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; } // TRÁI
-                if (c == 77 && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; } // PHẢI
-                if (c == 80 && canMove( 0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; } // XUỐNG
-                if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
-            }
-            else {
-                // Nhấn P để dừng game
-                if (c == 'p' || c == 'P') {
+                // Chỉ cho phép di chuyển khi KHÔNG tạm dừng
+                if (!isPaused) {
+                    if (c == 75 && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; } // TRÁI
+                    if (c == 77 && canMove(1, 0, currentBlock->shape)) { x++; stateChanged = true; } // PHẢI
+                    if (c == 80 && canMove(0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; } // XUỐNG
+                    if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
+                } else {
+                    // Nhấn P để dừng game
+                    if (c == 'p' || c == 'P') {
                     isPaused = !isPaused;
                     stateChanged = true; // Gọi để in PAUSED bên phải màn hình
-                } else if (c == 'q' || c == 'Q') break;
-                // Chỉ cho phép di chuyển khi KHÔNG tạm dừng
-                else if (!isPaused) {
-                    if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
-                    if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) { x++; stateChanged = true; }
-                    if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
-                    if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
+                    } else if (c == 'q' || c == 'Q') break;
+                    // Chỉ cho phép di chuyển khi KHÔNG tạm dừng
+                    else if (!isPaused) {
+                        if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
+                        if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) { x++; stateChanged = true; }
+                        if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
+                        if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
+                    }
                 }
-            }
         }
 
         DWORD currentTime = GetTickCount();
