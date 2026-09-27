@@ -175,6 +175,12 @@ int main()
                 if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
             }
             else {
+                // Nhấn P để dừng game
+                if (c == 'p' || c == 'P') {
+                    isPaused = !isPaused;
+                    stateChanged = true; // Gọi để in PAUSED bên phải màn hình
+                }
+
                 if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
                 if ((c == 'd' || c == 'D') && canMove( 1, 0, currentBlock->shape)) { x++; stateChanged = true; }
                 if ((c == 's' || c == 'S') && canMove( 0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
