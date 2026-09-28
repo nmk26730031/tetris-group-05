@@ -180,49 +180,50 @@ int main()
                     if (c == 80 && canMove(0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; } // XUỐNG
                     if (c == 72) { currentBlock->rotateBlock(); stateChanged = true; }                // XOAY
                 }
-                else {
-                    // Nhấn P để dừng game
-                    if (c == 'p' || c == 'P') {
-                        isPaused = !isPaused;
-                        stateChanged = true; // Gọi để in PAUSED bên phải màn hình
-                    }
-                    else if (c == 'q' || c == 'Q') break;
-                    // Chỉ cho phép di chuyển khi KHÔNG tạm dừng
-                    else if (!isPaused) {
-                        if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
-                        if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) { x++; stateChanged = true; }
-                        if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
-                        if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
-                    }
+            }
+            else {
+                // Nhấn P để dừng game
+                if (c == 'p' || c == 'P') {
+                    isPaused = !isPaused;
+                    stateChanged = true; // Gọi để in PAUSED bên phải màn hình
+                }
+                else if (c == 'q' || c == 'Q') break;
+                // Chỉ cho phép di chuyển khi KHÔNG tạm dừng
+                else if (!isPaused) {
+                    if ((c == 'a' || c == 'A') && canMove(-1, 0, currentBlock->shape)) { x--; stateChanged = true; }
+                    if ((c == 'd' || c == 'D') && canMove(1, 0, currentBlock->shape)) { x++; stateChanged = true; }
+                    if ((c == 's' || c == 'S') && canMove(0, 1, currentBlock->shape)) { y++; score += 1; stateChanged = true; }
+                    if (c == 'w' || c == 'W') { currentBlock->rotateBlock(); stateChanged = true; }
                 }
             }
-
-            DWORD currentTime = GetTickCount();
-            if (isPaused) {
-                // Đóng băng mốc thời gian
-                lastDropTime = currentTime;
-            }
-            else if (currentTime - lastDropTime >= (DWORD)sleepTime) {
-                // Logic trong đây giữ nguyên
-                if (canMove(0, 1, currentBlock->shape)) {
-                    y++;
-                    stateChanged = true; // Block đã di chuyển xuống -> vẽ lại
-                }
-                else {
-                    block2Board();
-                    removeLine();
-                    spawnBlock();
-                    if (!canMove(0, 0, currentBlock->shape)) break;
-                    stateChanged = true; // Block mới xuất hiện -> vẽ lại
-                }
-                lastDropTime = currentTime;
-            }
-            block2Board();
-            if (stateChanged) {
-                draw();
-            }
-            Sleep(20);
         }
-        return 0;
+
+        DWORD currentTime = GetTickCount();
+        if (isPaused) {
+            // Đóng băng mốc thời gian
+            lastDropTime = currentTime;
+        }
+        else if (currentTime - lastDropTime >= (DWORD)sleepTime) {
+            // Logic trong đây giữ nguyên
+            if (canMove(0, 1, currentBlock->shape)) {
+                y++;
+                stateChanged = true; // Block đã di chuyển xuống -> vẽ lại
+            }
+            else {
+                block2Board();
+                removeLine();
+                spawnBlock();
+                if (!canMove(0, 0, currentBlock->shape)) break;
+                stateChanged = true; // Block mới xuất hiện -> vẽ lại
+            }
+            lastDropTime = currentTime;
+        }
+        block2Board();
+        if (stateChanged) {
+            draw();
+        }
+        Sleep(20);
     }
+    return 0;
+
 }
