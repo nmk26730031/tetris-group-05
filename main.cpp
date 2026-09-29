@@ -149,6 +149,12 @@ int main()
     dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     SetConsoleMode(hOut, dwMode);
 
+    // Yêu cầu nhập tên trước khi vào game
+    cout << "============= TETRIS =============\n";
+    cout << "Nhap ten cua ban: ";
+    getline(cin, playerName);
+    system("cls"); // Xóa toàn bộ màn hình để vẽ game
+
     hideCursor();
     srand(time(0));
     initBoard();
