@@ -14,6 +14,7 @@ using namespace std;
 char board[H][W] = {};
 int x, y, b;
 int score = 0;
+string playerName;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
 
@@ -101,6 +102,9 @@ void draw(){
     cout << "\x1b[0m";
     gotoxy(W * 2 + 5, 4); 
     cout << "SCORE: " << score << " ";
+    // In tên ra màn hình
+    gotoxy(W * 2 + 5, 2); 
+    cout << "PLAYER: " << playerName;
 }
 
 void removeLine() {
@@ -147,6 +151,12 @@ int main()
     GetConsoleMode(hOut, &dwMode);
     dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     SetConsoleMode(hOut, dwMode);
+
+    // Yêu cầu nhập tên trước khi vào game
+    cout << "============= TETRIS =============\n";
+    cout << "Nhap ten cua ban: ";
+    getline(cin, playerName);
+    system("cls"); // Xóa toàn bộ màn hình để vẽ game
 
     hideCursor();
     srand(time(0));
