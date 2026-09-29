@@ -102,6 +102,9 @@ void draw(){
     cout << "\x1b[0m";
     gotoxy(W * 2 + 5, 4); 
     cout << "SCORE: " << score << " ";
+    // In tên ra màn hình
+    gotoxy(W * 2 + 5, 2); 
+    cout << "PLAYER: " << playerName;
 }
 
 void removeLine() {
