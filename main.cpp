@@ -14,6 +14,7 @@ using namespace std;
 char board[H][W] = {};
 int x, y, b;
 int score = 0;
+string playerName;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
 
