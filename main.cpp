@@ -16,7 +16,7 @@ int x, y, b;
 int score = 0;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
-
+blocks* nextBlock = nullptr;
 void gotoxy(int x, int y) {
     COORD coord;
     coord.X = x;
@@ -34,18 +34,20 @@ void hideCursor() {
 
 void spawnBlock() {
     x = 5; y = 1;
-    b = rand() % 7;
     if (currentBlock != nullptr) {
         delete currentBlock;
     }
-    switch (b) {
-    case 0: currentBlock = new block_I(); break;
-    case 1: currentBlock = new block_O(); break;
-    case 2: currentBlock = new block_T(); break;
-    case 3: currentBlock = new block_S(); break;
-    case 4: currentBlock = new block_Z(); break;
-    case 5: currentBlock = new block_J(); break;
-    case 6: currentBlock = new block_L(); break;
+    currentBlock = nextBlock; 
+    // Sinh ra khối mới cho lần tiếp theo
+    int random_b = rand() % 7;
+    switch (random_b) {
+        case 0: nextBlock = new block_I(); break;
+        case 1: nextBlock = new block_O(); break;
+        case 2: nextBlock = new block_T(); break;
+        case 3: nextBlock = new block_S(); break;
+        case 4: nextBlock = new block_Z(); break;
+        case 5: nextBlock = new block_J(); break;
+        case 6: nextBlock = new block_L(); break;
     }
 }
 
@@ -93,7 +95,7 @@ void draw(){
                     case 'J': cout << "\x1b[38;5;213m"; break; // Pink J
                     case 'T': cout << "\x1b[38;5;129m"; break; // Violet/Purple T
                 }
-                cout << "■ \x1b[0m";
+                cout << "■ \x1b[0m"; // reset block color
             } else cout << "  ";                        
         }
         cout << endl;
@@ -101,6 +103,28 @@ void draw(){
     cout << "\x1b[0m";
     gotoxy(W * 2 + 5, 4); 
     cout << "SCORE: " << score << " ";
+    gotoxy(W * 2 + 5, 9); 
+    cout << "NEXT BLOCK:";
+    for(int i = 0; i < 4; i++) {
+        gotoxy(W * 2 + 9, 10 + i); 
+        for(int j = 0; j < 4; j++) {
+            char c = nextBlock->shape[i][j];
+            if (c != ' ') {
+                switch (c) {
+                    case 'O': cout << "\x1b[38;5;226m"; break; // Yellow O
+                    case 'I': cout << "\x1b[38;5;51m"; break;  // Cyan I
+                    case 'Z': cout << "\x1b[38;5;46m"; break;  // Green Z
+                    case 'S': cout << "\x1b[38;5;196m"; break; // Red S
+                    case 'L': cout << "\x1b[38;5;214m"; break; // Orange L
+                    case 'J': cout << "\x1b[38;5;213m"; break; // Pink J
+                    case 'T': cout << "\x1b[38;5;129m"; break; // Violet/Purple T
+                }
+                cout << "■ \x1b[0m"; // reset block color
+            } else {
+                cout << "  "; 
+            }
+        }
+    }
 }
 
 void removeLine() {
@@ -151,6 +175,16 @@ int main()
     hideCursor();
     srand(time(0));
     initBoard();
+    int initial_b = rand() % 7;
+    switch (initial_b) {
+        case 0: nextBlock = new block_I(); break;
+        case 1: nextBlock = new block_O(); break;
+        case 2: nextBlock = new block_T(); break;
+        case 3: nextBlock = new block_S(); break;
+        case 4: nextBlock = new block_Z(); break;
+        case 5: nextBlock = new block_J(); break;
+        case 6: nextBlock = new block_L(); break;
+    }
     spawnBlock();
 
     // Lưu thời điểm cuối cùng block tự động rơi
@@ -202,5 +236,8 @@ int main()
         }
         Sleep(20);
     }
+    // Giải phóng bộ nhớ
+    if (currentBlock != nullptr) delete currentBlock;
+    if (nextBlock != nullptr) delete nextBlock;
     return 0;
 }
