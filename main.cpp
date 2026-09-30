@@ -47,6 +47,7 @@ void spawnBlock() {
         case 3: nextBlock = new block_S(); break;
         case 4: nextBlock = new block_Z(); break;
         case 5: nextBlock = new block_J(); break;
+        case 6: nextBlock = new block_L(); break;
     }
 }
 
