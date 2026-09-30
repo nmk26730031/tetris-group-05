@@ -153,6 +153,16 @@ int main()
     hideCursor();
     srand(time(0));
     initBoard();
+    int initial_b = rand() % 7;
+    switch (initial_b) {
+        case 0: nextBlock = new block_I(); break;
+        case 1: nextBlock = new block_O(); break;
+        case 2: nextBlock = new block_T(); break;
+        case 3: nextBlock = new block_S(); break;
+        case 4: nextBlock = new block_Z(); break;
+        case 5: nextBlock = new block_J(); break;
+        case 6: nextBlock = new block_L(); break;
+    }
     spawnBlock();
 
     // Lưu thời điểm cuối cùng block tự động rơi
