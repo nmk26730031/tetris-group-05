@@ -16,7 +16,7 @@ int x, y, b;
 int score = 0;
 int sleepTime = 500;
 blocks* currentBlock = nullptr;
-
+blocks* nextBlock = nullptr;
 void gotoxy(int x, int y) {
     COORD coord;
     coord.X = x;
