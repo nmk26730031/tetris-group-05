@@ -34,18 +34,19 @@ void hideCursor() {
 
 void spawnBlock() {
     x = 5; y = 1;
-    b = rand() % 7;
     if (currentBlock != nullptr) {
         delete currentBlock;
     }
-    switch (b) {
-    case 0: currentBlock = new block_I(); break;
-    case 1: currentBlock = new block_O(); break;
-    case 2: currentBlock = new block_T(); break;
-    case 3: currentBlock = new block_S(); break;
-    case 4: currentBlock = new block_Z(); break;
-    case 5: currentBlock = new block_J(); break;
-    case 6: currentBlock = new block_L(); break;
+    currentBlock = nextBlock; 
+    // Sinh ra khối mới cho lần tiếp theo
+    int random_b = rand() % 7;
+    switch (random_b) {
+        case 0: nextBlock = new block_I(); break;
+        case 1: nextBlock = new block_O(); break;
+        case 2: nextBlock = new block_T(); break;
+        case 3: nextBlock = new block_S(); break;
+        case 4: nextBlock = new block_Z(); break;
+        case 5: nextBlock = new block_J(); break;
     }
 }
 
