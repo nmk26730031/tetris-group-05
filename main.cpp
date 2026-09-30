@@ -214,5 +214,8 @@ int main()
         }
         Sleep(20);
     }
+    // Giải phóng bộ nhớ
+    if (currentBlock != nullptr) delete currentBlock;
+    if (nextBlock != nullptr) delete nextBlock;
     return 0;
 }
