@@ -95,7 +95,7 @@ void draw(){
                     case 'J': cout << "\x1b[38;5;213m"; break; // Pink J
                     case 'T': cout << "\x1b[38;5;129m"; break; // Violet/Purple T
                 }
-                cout << "■ \x1b[0m";
+                cout << "■ \x1b[0m"; // reset block color
             } else cout << "  ";                        
         }
         cout << endl;
@@ -103,6 +103,28 @@ void draw(){
     cout << "\x1b[0m";
     gotoxy(W * 2 + 5, 4); 
     cout << "SCORE: " << score << " ";
+    gotoxy(W * 2 + 5, 9); 
+    cout << "NEXT BLOCK:";
+    for(int i = 0; i < 4; i++) {
+        gotoxy(W * 2 + 9, 10 + i); 
+        for(int j = 0; j < 4; j++) {
+            char c = nextBlock->shape[i][j];
+            if (c != ' ') {
+                switch (c) {
+                    case 'O': cout << "\x1b[38;5;226m"; break; // Yellow O
+                    case 'I': cout << "\x1b[38;5;51m"; break;  // Cyan I
+                    case 'Z': cout << "\x1b[38;5;46m"; break;  // Green Z
+                    case 'S': cout << "\x1b[38;5;196m"; break; // Red S
+                    case 'L': cout << "\x1b[38;5;214m"; break; // Orange L
+                    case 'J': cout << "\x1b[38;5;213m"; break; // Pink J
+                    case 'T': cout << "\x1b[38;5;129m"; break; // Violet/Purple T
+                }
+                cout << "■ \x1b[0m"; // reset block color
+            } else {
+                cout << "  "; 
+            }
+        }
+    }
 }
 
 void removeLine() {
