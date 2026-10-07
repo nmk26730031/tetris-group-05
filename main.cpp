@@ -4,6 +4,10 @@
 #include <cstdlib>
 #include <windows.h>
 #include "blocks.h"
+
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
@@ -193,9 +197,17 @@ int main()
     getline(cin, playerName);
     system("cls"); // Xóa toàn bộ màn hình để vẽ game
 
+    // Ẩn con trỏ chuột để không bị nhấp nháy
     hideCursor();
     srand(time(0));
+
+    // Khởi tạo bảng
     initBoard();
+
+    // Phát nhạc nền
+    PlaySound(TEXT("theme_tetris.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
+    // Sinh khối ngẫu nhiên trước
     int initial_b = rand() % 7;
     switch (initial_b) {
         case 0: nextBlock = new block_I(); break;
@@ -206,6 +218,7 @@ int main()
         case 5: nextBlock = new block_J(); break;
         case 6: nextBlock = new block_L(); break;
     }
+    // Sinh khối
     spawnBlock();
 
     // Lưu thời điểm cuối cùng block tự động rơi
@@ -254,24 +267,28 @@ int main()
             lastDropTime = currentTime;
         }
         else if (currentTime - lastDropTime >= (DWORD)sleepTime) {
-            // Logic trong đây giữ nguyên
+            // Nếu di chuyển được thì tăng y
             if (canMove(0, 1, currentBlock->shape)) {
                 y++;
                 stateChanged = true; // Block đã di chuyển xuống -> vẽ lại
             }
+            // Nếu không di chuyển được thì gán block, kiểm tra xóa dòng và sinh block mới
             else {
                 block2Board();
                 removeLine();
                 spawnBlock();
+                // Nếu sinh khối mới bị kẹt thì kết thúc game
                 if (!canMove(0, 0, currentBlock->shape)) break;
                 stateChanged = true; // Block mới xuất hiện -> vẽ lại
             }
             lastDropTime = currentTime;
         }
+        // Gán block vào bảng và vẽ lại nếu có sự thay đổi
         block2Board();
         if (stateChanged) {
             draw();
         }
+        // Ngủ 20ms để giảm tải CPU và tránh nhấp nháy màn hình
         Sleep(20);
     }
     // Giải phóng bộ nhớ
