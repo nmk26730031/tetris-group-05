@@ -4,6 +4,10 @@
 #include <cstdlib>
 #include <windows.h>
 #include "blocks.h"
+
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
@@ -199,6 +203,10 @@ int main()
 
     // Khởi tạo bảng
     initBoard();
+
+    // Phát nhạc nền
+    PlaySound(TEXT("theme_tetris.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     // Sinh khối ngẫu nhiên trước
     int initial_b = rand() % 7;
     switch (initial_b) {
