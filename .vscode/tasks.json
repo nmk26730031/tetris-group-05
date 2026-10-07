@@ -9,7 +9,8 @@
                 "-g",
                 "${workspaceFolder}\\*.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-lwinmm"
             ],
             "options": {
                 "cwd": "${fileDirname}"
